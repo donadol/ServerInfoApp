@@ -7,20 +7,21 @@
     <ImageView
         android:id="@+id/iv_logo"
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_weight="0.2" />
+        android:layout_height="50dp"
+        android:layout_weight="0.15"
+        app:srcCompat="@drawable/no_logo_available" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_weight="0.7"
+        android:layout_height="50dp"
+        android:layout_weight="0.75"
         android:gravity="center|left" />
 
     <ImageView
         android:id="@+id/iv_is_down"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:layout_weight="0.1"
         app:srcCompat="@android:drawable/presence_offline" />
 </LinearLayout>
