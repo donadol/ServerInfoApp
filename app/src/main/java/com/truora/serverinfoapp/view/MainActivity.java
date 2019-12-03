@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +17,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.truora.serverinfoapp.R;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,10 +42,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String domain = et_domain.getText().toString();
                 if(domain.isEmpty()){
-                    // manejar error
+                    Toast.makeText(MainActivity.this, "Can search for empty domain", Toast.LENGTH_LONG).show();
                 }else{
-                    //revisar que sea un dominio válido
-                    consumeRESTVolleyInfoServer(domain);
+                    URL url;
+                    HttpURLConnection huc= null;
+                    int responseCode=HttpURLConnection.HTTP_NOT_FOUND;
+                    try {
+                        url = new URL(domain);
+                        huc = (HttpURLConnection) url.openConnection();
+                        huc.setRequestMethod("HEAD");
+                        responseCode = huc.getResponseCode();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(responseCode == HttpURLConnection.HTTP_OK)
+                        consumeRESTVolleyInfoServer(domain);
+                    else{
+                        Toast.makeText(MainActivity.this, "Can search for a url that doesn't exist", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -52,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void consumeRESTVolleyInfoServer(String domain){
+    public void consumeRESTVolleyInfoServer(final String domain){
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://10.0.2.2:3000/"+domain;
         StringRequest req = new StringRequest(Request.Method.GET, url,
@@ -62,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         String data = (String)response;
                         Intent i = new Intent(MainActivity.this, InfoServerActivity.class);
                         i.putExtra("info", data);
+                        i.putExtra("host", domain);
                         startActivity(i);
                     }
                 },
