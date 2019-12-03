@@ -1,6 +1,7 @@
 package com.truora.serverinfoapp.utils;
 
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.truora.serverinfoapp.model.InfoServer;
 import com.truora.serverinfoapp.model.Server;
@@ -29,11 +30,10 @@ public class Utils {
             JSONArray servers = jsonObject.getJSONArray("servers");
             for(int i=0;i<servers.length();++i) {
                 JSONObject server = servers.getJSONObject(i);
-                Log.i("SERVER", server.toString());
                 serversAux.add(new Server(new String(server.getString("address").getBytes("ISO-8859-1"), "UTF-8"),
-                        new String(jsonObject.getString("ssl_grade").getBytes("ISO-8859-1"), "UTF-8"),
-                        new String(jsonObject.getString("country").getBytes("ISO-8859-1"), "UTF-8"),
-                        new String(jsonObject.getString("owner").getBytes("ISO-8859-1"), "UTF-8")));
+                        new String(server.getString("ssl_grade").getBytes("ISO-8859-1"), "UTF-8"),
+                        new String(server.getString("country").getBytes("ISO-8859-1"), "UTF-8"),
+                        new String(server.getString("owner").getBytes("ISO-8859-1"), "UTF-8")));
             }
             infoServer.setServers(serversAux);
         } catch (JSONException e) {
@@ -42,5 +42,19 @@ public class Utils {
             e.printStackTrace();
         }
         return infoServer;
+    }
+    public static void downloadImage(String image, String host, ImageView iv){
+        if(!(image == null) && !(image.isEmpty())){
+            String url="";
+            if(image.contains("//") && !image.contains("http")){
+                url+="https:"+image;
+            }else if((image.contains(".ico") || image.contains(".png") || image.contains(".jpg"))&& !image.contains("http")){
+                url+="https://"+host+image;
+            }else {
+                url = image;
+            }
+            new DownloadImageTask(iv)
+                    .execute(url);
+        }
     }
 }

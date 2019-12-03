@@ -1,6 +1,7 @@
 package com.truora.serverinfoapp.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import com.truora.serverinfoapp.R;
 import com.truora.serverinfoapp.model.Domain;
 import com.truora.serverinfoapp.utils.DownloadImageTask;
+import com.truora.serverinfoapp.utils.Utils;
 
 import java.util.List;
 
@@ -34,16 +36,18 @@ public class DomainAdapter extends ArrayAdapter<Domain> {
         ImageView iv_logo = convertView.findViewById(R.id.iv_logo);
         ImageView iv_is_down = convertView.findViewById(R.id.iv_is_down);
 
-        tv_title.setText(domain.getInfoServer().getTitle());
-        if(!(domain.getInfoServer().getLogo() == null) && !(domain.getInfoServer().getLogo().isEmpty())){
-            new DownloadImageTask(iv_logo)
-                    .execute(domain.getInfoServer().getLogo());
+        String title=domain.getInfoServer().getTitle();
+        if(title.contains(" ") && title.length()>65) {
+            title = title.substring(0, title.indexOf(" "));
         }
+        tv_title.setText(title);
+
+        Utils.downloadImage(domain.getInfoServer().getLogo(), domain.getHost(), iv_logo);
 
         if(!domain.getInfoServer().isDown()){
             iv_is_down.setImageResource(android.R.drawable.presence_online);
         }
-        // Return the completed view to render on screen
+
         return convertView;
     }
 }
