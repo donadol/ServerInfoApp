@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i("TAG", "Error handling rest invocation "+error.getCause());
+                        Toast.makeText(MainActivity.this, "An error occured", Toast.LENGTH_LONG).show();
                     } }
         );
         queue.add(req);
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i("TAG", "Error handling rest invocation "+error.getCause());
+                        Toast.makeText(MainActivity.this, "An error occured", Toast.LENGTH_LONG).show();
                     } }
         );
         queue.add(req);
