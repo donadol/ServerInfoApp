@@ -1,6 +1,8 @@
 package com.truora.serverinfoapp.model;
 
-public class Server {
+import java.io.Serializable;
+
+public class Server implements Serializable {
     private String address;
     private String grade;
     private String country;

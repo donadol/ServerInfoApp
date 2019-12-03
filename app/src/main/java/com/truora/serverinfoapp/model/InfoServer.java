@@ -1,8 +1,9 @@
 package com.truora.serverinfoapp.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class InfoServer {
+public class InfoServer implements Serializable {
     private boolean serversChanged;
     private String minGrade;
     private String previousMinGrade;

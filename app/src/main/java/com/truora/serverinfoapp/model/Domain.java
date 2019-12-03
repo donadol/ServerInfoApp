@@ -1,8 +1,9 @@
 package com.truora.serverinfoapp.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Domain {
+public class Domain implements Serializable {
     private String host;
     private Date consultedTime;
     private InfoServer infoServer;
