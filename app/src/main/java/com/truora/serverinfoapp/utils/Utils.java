@@ -13,8 +13,12 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
+    public static String regex = "<\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]>";
+
     public static InfoServer parseJSON(String data) {
         InfoServer infoServer = new InfoServer();
         try {
@@ -28,7 +32,7 @@ public class Utils {
 
             List<Server> serversAux = new ArrayList<>();
             JSONArray servers = jsonObject.getJSONArray("servers");
-            for(int i=0;i<servers.length();++i) {
+            for (int i = 0; i < servers.length(); ++i) {
                 JSONObject server = servers.getJSONObject(i);
                 serversAux.add(new Server(new String(server.getString("address").getBytes("ISO-8859-1"), "UTF-8"),
                         new String(server.getString("ssl_grade").getBytes("ISO-8859-1"), "UTF-8"),
@@ -43,18 +47,29 @@ public class Utils {
         }
         return infoServer;
     }
-    public static void downloadImage(String image, String host, ImageView iv){
-        if(!(image == null) && !(image.isEmpty())){
-            String url="";
-            if(image.contains("//") && !image.contains("http")){
-                url+="https:"+image;
-            }else if((image.contains(".ico") || image.contains(".png") || image.contains(".jpg"))&& !image.contains("http")){
-                url+="https://"+host+image;
-            }else {
+
+    public static void downloadImage(String image, String host, ImageView iv) {
+        if (!(image == null) && !(image.isEmpty())) {
+            String url = "";
+            if (image.contains("//") && !image.contains("http")) {
+                url += "https:" + image;
+            } else if ((image.contains(".ico") || image.contains(".png") || image.contains(".jpg")) && !image.contains("http")) {
+                url += "https://" + host + image;
+            } else {
                 url = image;
             }
             new DownloadImageTask(iv)
                     .execute(url);
+        }
+    }
+
+    public static boolean IsMatch(String s, String pattern) {
+        try {
+            Pattern patt = Pattern.compile(pattern);
+            Matcher matcher = patt.matcher(s);
+            return matcher.matches();
+        } catch (RuntimeException e) {
+            return false;
         }
     }
 }

@@ -17,10 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.truora.serverinfoapp.R;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.truora.serverinfoapp.utils.Utils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,21 +41,10 @@ public class MainActivity extends AppCompatActivity {
                 if(domain.isEmpty()){
                     Toast.makeText(MainActivity.this, "Can search for empty domain", Toast.LENGTH_LONG).show();
                 }else{
-                    URL url;
-                    HttpURLConnection huc= null;
-                    int responseCode=HttpURLConnection.HTTP_NOT_FOUND;
-                    try {
-                        url = new URL(domain);
-                        huc = (HttpURLConnection) url.openConnection();
-                        huc.setRequestMethod("HEAD");
-                        responseCode = huc.getResponseCode();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if(responseCode == HttpURLConnection.HTTP_OK)
+                    if(Utils.IsMatch(domain, Utils.regex))
                         consumeRESTVolleyInfoServer(domain);
                     else{
-                        Toast.makeText(MainActivity.this, "Can search for a url that doesn't exist", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Wrong structure for domain", Toast.LENGTH_LONG).show();
                     }
                 }
             }
