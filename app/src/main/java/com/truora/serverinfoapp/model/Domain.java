@@ -5,14 +5,12 @@ import java.util.Date;
 
 public class Domain implements Serializable {
     private String host;
-    private Date consultedTime;
     private InfoServer infoServer;
 
     public Domain() { }
 
-    public Domain(String host, Date consultedTime, InfoServer infoServer) {
+    public Domain(String host, InfoServer infoServer) {
         this.host = host;
-        this.consultedTime = consultedTime;
         this.infoServer = infoServer;
     }
 
@@ -22,14 +20,6 @@ public class Domain implements Serializable {
 
     public void setHost(String host) {
         this.host = host;
-    }
-
-    public Date getConsultedTime() {
-        return consultedTime;
-    }
-
-    public void setConsultedTime(Date consultedTime) {
-        this.consultedTime = consultedTime;
     }
 
     public InfoServer getInfoServer() {
