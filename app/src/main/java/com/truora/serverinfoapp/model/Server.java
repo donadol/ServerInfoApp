@@ -1,6 +1,6 @@
-package co.edu.javeriana.whoisapp.model;
+package com.truora.serverinfoapp.model;
 
-class Server {
+public class Server {
     private String address;
     private String grade;
     private String country;

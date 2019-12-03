@@ -1,4 +1,4 @@
-package co.edu.javeriana.whoisapp.model;
+package com.truora.serverinfoapp.model;
 
 import java.util.Date;
 
