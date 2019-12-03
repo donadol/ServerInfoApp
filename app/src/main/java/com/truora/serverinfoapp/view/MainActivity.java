@@ -1,26 +1,21 @@
-package co.edu.javeriana.whoisapp.view;
+package com.truora.serverinfoapp.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.DownloadManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.truora.serverinfoapp.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-import co.edu.javeriana.whoisapp.R;
 
 public class MainActivity extends AppCompatActivity {
     private Button btn_search;
@@ -48,16 +43,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void consumeRESTVolley(){
+    public void consumeRESTVolleyInfoServer(String domain){
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://maps.googleapis.com/maps/api/directions/json?";
-
-        StringRequest req = new StringRequest(DownloadManager.Request.Method, url,
+        String url = "http://localhost:3000/"+domain;
+        StringRequest req = new StringRequest(Request.Method.GET, url,
                 new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         String data = (String)response;
-                        parseJSON(data);
+                        Intent i = new Intent(MainActivity.this, DomainsActivity.class);
+                        i.putExtra("domain", data);
+                        startActivity(i);
                     }
                 },
                 new Response.ErrorListener() {
@@ -67,31 +63,5 @@ public class MainActivity extends AppCompatActivity {
                     } }
         );
         queue.add(req);
-    }
-
-    private void parseJSON(String data) {
-        ArrayList<LatLng> result = new ArrayList<>();
-        String distance="";
-        Double d=0.0;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            JSONArray steps = jsonObject.getJSONArray("routes");
-            steps = steps.getJSONObject(0).getJSONArray("legs");
-            d = steps.getJSONObject(0).getJSONObject("distance").getDouble("value");
-            steps = steps.getJSONObject(0).getJSONArray("steps");
-
-            result.add(new LatLng(((JSONObject)((JSONObject)steps.get(0)).get("start_location")).getDouble("lat"), ((JSONObject)((JSONObject)steps.get(0)).get("start_location")).getDouble("lng")));
-            for(int i=0;i<steps.length();++i) {
-                JSONObject punto = steps.getJSONObject(i);
-                result.add(new LatLng(((JSONObject)punto.get("end_location")).getDouble("lat"), ((JSONObject)punto.get("end_location")).getDouble("lng")));
-            }
-
-            distance = "La distancia es: " + d/1000.0 + " Km a su objetivo";
-            //mMap.moveCamera(CameraUpdateFactory.zoomTo((int)(15*d)));
-
-            //Toast.makeText(getApplicationContext(),  distance ,Toast.LENGTH_LONG).show();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }
