@@ -32,7 +32,7 @@ public class DomainsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_domains);
 
-        List<Domain> domains = parseJSON(getIntent().getStringExtra("domains"));
+        final List<Domain> domains = parseJSON(getIntent().getStringExtra("domains"));
 
         list = findViewById(R.id.list);
 
@@ -43,7 +43,8 @@ public class DomainsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(DomainsActivity.this, InfoServerActivity.class);
-                i.putExtra("info", domainAdapter.getItem(position).getInfoServer());
+                i.putExtra("infoSer", domainAdapter.getItem(position).getInfoServer());
+                i.putExtra("host", domainAdapter.getItem(position).getHost());
                 startActivity(i);
             }
         });
@@ -56,9 +57,8 @@ public class DomainsActivity extends AppCompatActivity {
             JSONArray items = jsonObject.getJSONArray("items");
             for(int i=0;i<items.length();++i) {
                 JSONObject domain = items.getJSONObject(i);
-                JSONArray infoservers = domain.getJSONArray("infoservers");
-                Log.i("INFOS", infoservers.toString());
-                InfoServer infoServer = Utils.parseJSON(infoservers.get(0).toString());
+                JSONObject infoServerObj = domain.getJSONObject("infoserver");
+                InfoServer infoServer = Utils.parseJSON(infoServerObj.toString());
                 domainList.add(new Domain(new String(domain.getString("domain").getBytes("ISO-8859-1"), "UTF-8"), infoServer));
             }
         } catch (JSONException e) {
