@@ -40,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
                 String domain = et_domain.getText().toString();
                 if(domain.isEmpty()){
                     Toast.makeText(MainActivity.this, "Can search for empty domain", Toast.LENGTH_LONG).show();
-                }else{
-                    if(Utils.IsMatch(domain, Utils.regex))
-                        consumeRESTVolleyInfoServer(domain);
-                    else{
-                        Toast.makeText(MainActivity.this, "Wrong structure for domain", Toast.LENGTH_LONG).show();
-                    }
+                    return;
                 }
+                if(!Utils.IsMatch(domain, Utils.regex)) {
+                    Toast.makeText(MainActivity.this, "Wrong structure for domain", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                consumeRESTVolleyInfoServer(domain);
             }
         });
 
